@@ -3,7 +3,11 @@ import {
   Box,
   Button,
   Container,
+  FormControl,
   IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
   Select,
   TextField,
   Typography
@@ -82,7 +86,9 @@ const Publish = () => {
   const [files, setFiles] = useState([])
 
   const { getRootProps, getInputProps } = useDropzone({
-    accept: 'image/*',
+    accept: {
+      'image/*': ['.jpeg', '.jpg', '.png'],
+    },
     onDrop: (acceptedFile) => {
       const newFiles = acceptedFile.map((file) => {
         return Object.assign(file, {
@@ -214,6 +220,24 @@ const Publish = () => {
             variant="outlined"
             fullWidth
           />
+        </Box>
+      </Container>
+
+      <Container maxWidth="md" className={classes.boxContainer}>
+        <Box className={classes.box}>
+          <Typography componet="h6" variant="h6" color="textPrimary">
+            Price
+          </Typography>
+          <br />
+          <FormControl fullWidth>
+            <InputLabel>Amount</InputLabel>
+            <OutlinedInput
+              onChange={() => {}}
+              startAdornment={<InputAdornment position="start">$</InputAdornment>}
+              label="Amount"
+              labelWith={40}
+            />
+          </FormControl>
         </Box>
       </Container>
 
