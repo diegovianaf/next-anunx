@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(8, 0, 6),
   },
   carMedia: {
-    paddingTop: '56%'
+    paddingTop: '56%',
   },
   buttonAdd: {
     margin: '30px auto',
@@ -40,7 +40,7 @@ const Home = () => {
             Publish new Advertisement
           </Button>
         </Container>
-        <Container maxWidth="md" style={{paddingTop: '3rem'}}>
+        <Container maxWidth="md">
           <Grid container spacing={4}>
             <Grid item xs={12} sm={6} md={4}>
               <Card>
