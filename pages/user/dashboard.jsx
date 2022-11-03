@@ -14,9 +14,6 @@ import { makeStyles } from '@mui/styles'
 import TemplateDefault from '../../src/templates/Default'
 
 const useStyles = makeStyles((theme) => ({
-  container: {
-    padding: theme.spacing(8, 0, 6),
-  },
   carMedia: {
     paddingTop: '56%',
   },
@@ -32,8 +29,8 @@ const Home = () => {
   return (
     <TemplateDefault>
       <ThemeProvider >
-        <Container maxWidth="sm" className={classes.container} align="center">
-          <Typography component="h1" variant="h2">
+        <Container maxWidth="sm">
+          <Typography component="h1" variant="h2" align="center">
             My Advertisements
           </Typography>
           <Button variant="contained" color="primary" className={classes.buttonAdd}>
