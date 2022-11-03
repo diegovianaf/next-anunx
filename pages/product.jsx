@@ -1,5 +1,16 @@
-import { Avatar, Box, Card, CardHeader, CardMedia, Chip, Container, Grid, Typography } from '@mui/material'
+import {
+  Avatar,
+  Box,
+  Card,
+  CardHeader,
+  CardMedia,
+  Chip,
+  Container,
+  Grid,
+  Typography
+} from '@mui/material'
 import { makeStyles } from '@mui/styles'
+import Carousel from 'react-material-ui-carousel'
 import TemplateDefault from '../src/templates/Default'
 
 const useStyles = makeStyles((theme) => ({
@@ -15,6 +26,12 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 'bold',
     marginBottom: 15,
   },
+  card: {
+    height: '100%',
+  },
+  cardMedia: {
+    paddingTop: '56%'
+  },
 }))
 
 const Product = () => {
@@ -26,7 +43,31 @@ const Product = () => {
         <Grid container spacing={3}>
           <Grid item xs={8}>
             <Box className={classes.box}>
-              Images
+              <Carousel
+                autoPlay={false}
+                animation='slide'
+                navButtonsAlwaysVisible
+                navButtonsProps={{
+                  style: {
+                    color: 'white',
+                  }
+                }}
+              >
+                <Card className={classes.card}>
+                  <CardMedia
+                    image='https://source.unsplash.com/random?a=1'
+                    title='Image Title'
+                    className={classes.cardMedia}
+                  />
+                </Card>
+                <Card className={classes.card}>
+                  <CardMedia
+                    image='https://source.unsplash.com/random?a=2'
+                    title='Image Title'
+                    className={classes.cardMedia}
+                  />
+                </Card>
+              </Carousel>
             </Box>
 
             <Box className={classes.box} textAlign="left">
