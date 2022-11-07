@@ -7,9 +7,11 @@ import {
   Button,
   Container,
   FormControl,
+  FormHelperText,
   IconButton,
   InputAdornment,
   InputLabel,
+  MenuItem,
   OutlinedInput,
   Select,
   TextField,
@@ -87,6 +89,7 @@ const validationSchema = yup.object().shape({
     .min(6, 'Enter a longer title')
     .max(100, 'Enter a smaller title')
     .required('Required field'),
+  category: yup.string().required('Required field!'),
 })
 
 const Publish = () => {
@@ -120,7 +123,8 @@ const Publish = () => {
     <TemplateDefault>
       <Formik
         initialValues={{
-          title: ''
+          title: '',
+          category: '',
         }}
         validationSchema={validationSchema}
         onSubmit={(values) => {
@@ -171,30 +175,31 @@ const Publish = () => {
                     <Typography component="h6" variante="h6" color="textPrimary">
                       Category
                     </Typography>
-                    <Select
-                      native
-                      value=""
-                      fullWidth
-                      onChange={() => {}}
-                      inputProps={{
-                        name: 'age',
-                      }}
-                    >
-                      <option value="">Select</option>
-                      <option value={1}>Animals</option>
-                      <option value={2}>Automotives</option>
-                      <option value={3}>Children</option>
-                      <option value={4}>Equipment and Tools</option>
-                      <option value={5}>Farming</option>
-                      <option value={6}>Fashion</option>
-                      <option value={7}>Furniture, Garden and House</option>
-                      <option value={8}>Hobbies</option>
-                      <option value={9}>Job</option>
-                      <option value={10}>Services</option>
-                      <option value={11}>Sports</option>
-                      <option value={12}>Technology</option>
-                      <option value={13}>Other</option>
-                    </Select>
+                    <FormControl variant="standard" error={errors.category} fullWidth>
+                      <Select
+                        name="category"
+                        value={values.category}
+                        fullWidth
+                        onChange={handleChange}
+                      >
+                        <MenuItem value="Animals">Animals</MenuItem>
+                        <MenuItem value="Automotives">Automotives</MenuItem>
+                        <MenuItem value="Children">Children</MenuItem>
+                        <MenuItem value="Equipment and Tools">Equipment and Tools</MenuItem>
+                        <MenuItem value="Farming">Farming</MenuItem>
+                        <MenuItem value="Fashion">Fashion</MenuItem>
+                        <MenuItem value="Furniture, Garden and House">Furniture, Garden and House</MenuItem>
+                        <MenuItem value="Hobbies">Hobbies</MenuItem>
+                        <MenuItem value="Job">Job</MenuItem>
+                        <MenuItem value="Services">Services</MenuItem>
+                        <MenuItem value="Sports">Sports</MenuItem>
+                        <MenuItem value="Technology">Technology</MenuItem>
+                        <MenuItem value="Other">Other</MenuItem>
+                      </Select>
+                      <FormHelperText>
+                        { errors.category }
+                      </FormHelperText>
+                    </FormControl>
                   </Box>
                 </Container>
 
