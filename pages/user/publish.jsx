@@ -9,6 +9,7 @@ import {
   FormControl,
   FormHelperText,
   IconButton,
+  Input,
   InputAdornment,
   InputLabel,
   MenuItem,
@@ -38,6 +39,10 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexWrap: 'wrap',
     marginTop: 15,
+  },
+  inputLabel: {
+    fontWeight: 400,
+    color: theme.palette.primary.main,
   },
   dropzone: {
     alignItems: 'center',
@@ -90,6 +95,9 @@ const validationSchema = yup.object().shape({
     .max(100, 'Enter a smaller title')
     .required('Required field'),
   category: yup.string().required('Required field!'),
+  description: yup.string()
+    .min(50, 'Enter a description of at least 50 characters.')
+    .required('Required field'),
 })
 
 const Publish = () => {
@@ -125,6 +133,7 @@ const Publish = () => {
         initialValues={{
           title: '',
           category: '',
+          description: '',
         }}
         validationSchema={validationSchema}
         onSubmit={(values) => {
@@ -155,27 +164,21 @@ const Publish = () => {
 
                 <Container maxWidth="md" className={classes.boxContainer}>
                   <Box className={classes.box}>
-                    <Typography component="h6" variant="h6" color="textPrimary">
-                      Advertisement Title
-                    </Typography>
-                    <TextField
-                      variant="standard"
-                      name="title"
-                      value={values.title}
-                      onChange={handleChange}
-                      label="ex.: Bike with 3 months warranty"
-                      size="small"
-                      fullWidth
-                      error={errors.title}
-                      helperText={errors.title}
-                    />
-
+                    <FormControl error={errors.title} fullWidth>
+                      <InputLabel className={classes.inputLabel}>Advertisement Title</InputLabel>
+                      <Input
+                        name="title"
+                        value={values.title}
+                        onChange={handleChange}
+                      />
+                      <FormHelperText>
+                        { errors.category }
+                      </FormHelperText>
+                    </FormControl>
                     <br /><br />
 
-                    <Typography component="h6" variante="h6" color="textPrimary">
-                      Category
-                    </Typography>
                     <FormControl variant="standard" error={errors.category} fullWidth>
+                      <InputLabel className={classes.inputLabel}>Category</InputLabel>
                       <Select
                         name="category"
                         value={values.category}
@@ -249,18 +252,18 @@ const Publish = () => {
 
                 <Container maxWidth="md" className={classes.boxContainer}>
                   <Box className={classes.box}>
-                    <Typography component="h6" variant="h6" color="textPrimary">
-                      Description
-                    </Typography>
-                    <Typography component="div" variant="body2" color="textPrimary">
-                      Enter the details of what you are selling.
-                    </Typography>
-                    <TextField
-                      multiline
-                      rows={6}
-                      variant="outlined"
-                      fullWidth
-                    />
+                    <FormControl error={errors.description} fullWidth>
+                      <InputLabel className={classes.inputLabel}>Enter the details of what you are selling.</InputLabel>
+                      <TextField
+                      name="description"
+                        multiline
+                        rows={6}
+                        variant="outlined"
+                      />
+                      <FormHelperText>
+                        { errors.category }
+                      </FormHelperText>
+                    </FormControl>
                   </Box>
                 </Container>
 
