@@ -102,34 +102,13 @@ const validationSchema = yup.object().shape({
     .email('Enter a valid email')
     .required('Required field!'),
   phone: yup.number().required('Required field!'),
+  files: yup.array()
+    .min(1, 'Add at least one image')
+    .required('Required field!'),
 })
 
 const Publish = () => {
   const classes = useStyles()
-  const [files, setFiles] = useState([])
-
-  const { getRootProps, getInputProps } = useDropzone({
-    accept: {
-      'image/*': ['.jpeg', '.jpg', '.png'],
-    },
-    onDrop: (acceptedFile) => {
-      const newFiles = acceptedFile.map((file) => {
-        return Object.assign(file, {
-          preview: URL.createObjectURL(file)
-        })
-      })
-
-      setFiles([
-        ...files,
-        ...newFiles,
-      ])
-    }
-  })
-
-  const handleRemoveFile = (fileName) => {
-    const newFileState = files.filter((file) => file.name !== fileName)
-    setFiles(newFileState)
-  }
 
   return (
     <TemplateDefault>
@@ -142,6 +121,7 @@ const Publish = () => {
           email: '',
           firstName: '',
           phone: '',
+          files: [],
         }}
         validationSchema={validationSchema}
         onSubmit={(values) => {
@@ -150,12 +130,36 @@ const Publish = () => {
       >
         {
           ({
+            touched,
             values,
             errors,
             handleChange,
             handleSubmit,
+            setFieldValue,
           }) => {
-            console.log(errors)
+
+            const { getRootProps, getInputProps } = useDropzone({
+              accept: {
+                'image/*': ['.jpeg', '.jpg', '.png'],
+              },
+              onDrop: (acceptedFile) => {
+                const newFiles = acceptedFile.map((file) => {
+                  return Object.assign(file, {
+                    preview: URL.createObjectURL(file)
+                  })
+                })
+          
+                setFieldValue('files', [
+                  ...values.files,
+                  ...newFiles,
+                ])
+              }
+            })
+          
+            const handleRemoveFile = (fileName) => {
+              const newFileState = values.files.filter((file) => file.name !== fileName)
+              setFieldValue('files', newFileState)
+            }
 
             return (
               <form onSubmit={handleSubmit}>
@@ -172,7 +176,7 @@ const Publish = () => {
 
                 <Container maxWidth="md" className={classes.boxContainer}>
                   <Box className={classes.box}>
-                    <FormControl error={errors.title} fullWidth>
+                    <FormControl error={errors.title && touched.title} fullWidth>
                       <InputLabel className={classes.inputLabel}>Advertisement Title</InputLabel>
                       <OutlinedInput
                         name="title"
@@ -181,12 +185,12 @@ const Publish = () => {
                         onChange={handleChange}
                       />
                       <FormHelperText>
-                        { errors.title }
+                        { errors.title && touched.title ? errors.title : null }
                       </FormHelperText>
                     </FormControl>
                     <br /><br />
 
-                    <FormControl error={errors.category} fullWidth>
+                    <FormControl error={errors.category && touched.category} fullWidth>
                       <InputLabel className={classes.inputLabel}>Category</InputLabel>
                       <Select
                         name="category"
@@ -209,7 +213,7 @@ const Publish = () => {
                         <MenuItem value="Other">Other</MenuItem>
                       </Select>
                       <FormHelperText>
-                        { errors.category }
+                        { errors.category && touched.category ? errors.category : null }
                       </FormHelperText>
                     </FormControl>
                   </Box>
@@ -220,19 +224,24 @@ const Publish = () => {
                     <Typography component="h6" variant="h6" color="textPrimary">
                       Images
                     </Typography>
-                    <Typography component="div" variant="body2" color="textPrimary">
+                    <Typography component="div" variant="body2" color={errors.files && touched.files ? 'error' : 'textPrimary'}>
                       The first image is the main one of your advertisement.
                     </Typography>
+                    {
+                      errors.files && touched.files
+                        ? <Typography variant="body2" color="error" gutterBottom>{errors.files}</Typography>
+                        : null
+                    }
                     <Box className={classes.thumbsContainer}>
                       <Box className={classes.dropzone} {...getRootProps()}>
-                        <input {...getInputProps()} />
-                        <Typography variant="body2" color="textPrimary">
+                        <input name="files" {...getInputProps()} />
+                        <Typography variant="body2" color={errors.files && touched.files ? 'error' : 'textPrimary'}>
                           Click to add or drag the image here.
                         </Typography>
                       </Box>
 
                       {
-                        files.map((file, index) => (
+                        values.files.map((file, index) => (
                           <Box
                             key={file.name}
                             className={classes.thumb}
@@ -261,7 +270,7 @@ const Publish = () => {
 
                 <Container maxWidth="md" className={classes.boxContainer}>
                   <Box className={classes.box}>
-                    <FormControl error={errors.description} fullWidth>
+                    <FormControl error={errors.description && touched.description} fullWidth>
                       <InputLabel className={classes.inputLabel}>Enter the details of what you are selling.</InputLabel>
                       <OutlinedInput
                         name="description"
@@ -272,7 +281,7 @@ const Publish = () => {
                         onChange={handleChange}
                       />
                       <FormHelperText>
-                        { errors.description }
+                        { errors.description && touched.description ? errors.description : null }
                       </FormHelperText>
                     </FormControl>
                   </Box>
@@ -280,7 +289,7 @@ const Publish = () => {
 
                 <Container maxWidth="md" className={classes.boxContainer}>
                   <Box className={classes.box}>
-                    <FormControl error={errors.price} fullWidth>
+                    <FormControl error={errors.price && touched.price} fullWidth>
                       <InputLabel className={classes.inputLabel}>Selling price</InputLabel>
                       <OutlinedInput
                         name="price"
@@ -290,7 +299,7 @@ const Publish = () => {
                         startAdornment={<InputAdornment position="start">$</InputAdornment>}
                       />
                       <FormHelperText>
-                        { errors.price }
+                        { errors.price && touched.price ? errors.price : null }
                       </FormHelperText>
                     </FormControl>
                   </Box>
@@ -302,7 +311,7 @@ const Publish = () => {
                       Contact Information
                     </Typography>
 
-                    <FormControl error={errors.firstName} fullWidth>
+                    <FormControl error={errors.firstName && touched.firstName} fullWidth>
                       <InputLabel className={classes.inputLabel}>Name</InputLabel>
                       <OutlinedInput
                         name="firstName"
@@ -311,13 +320,13 @@ const Publish = () => {
                         onChange={handleChange}
                       />
                       <FormHelperText>
-                        { errors.firstName }
+                        { errors.firstName && touched.firstName ? errors.firstName : null }
                       </FormHelperText>
                     </FormControl>
 
                     <br /><br />
 
-                    <FormControl error={errors.email} fullWidth>
+                    <FormControl error={errors.email && touched.email} fullWidth>
                       <InputLabel className={classes.inputLabel}>Email</InputLabel>
                       <OutlinedInput
                         name="email"
@@ -326,13 +335,13 @@ const Publish = () => {
                         onChange={handleChange}
                       />
                       <FormHelperText>
-                        { errors.email }
+                        { errors.email && touched.email ? errors.email : null }
                       </FormHelperText>
                     </FormControl>
 
                     <br /><br />
 
-                    <FormControl error={errors.phone} fullWidth>
+                    <FormControl error={errors.phone && touched.phone} fullWidth>
                       <InputLabel className={classes.inputLabel}>Phone Number</InputLabel>
                       <OutlinedInput
                         name="phone"
@@ -341,7 +350,7 @@ const Publish = () => {
                         onChange={handleChange}
                       />
                       <FormHelperText>
-                        { errors.phone }
+                        { errors.phone && touched.phone ? errors.phone : null }
                       </FormHelperText>
                     </FormControl>
                   </Box>
