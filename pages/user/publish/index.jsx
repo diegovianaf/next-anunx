@@ -1,6 +1,4 @@
-import { useState } from 'react'
 import { Formik } from 'formik'
-import * as yup from 'yup'
 
 import {
   Box,
@@ -18,94 +16,12 @@ import {
 } from '@mui/material'
 
 import { useDropzone } from 'react-dropzone'
-import { makeStyles } from '@mui/styles'
 import { DeleteForever } from '@mui/icons-material'
 
-import TemplateDefault from '../../src/templates/Default'
+import TemplateDefault from '../../../src/templates/Default'
+import { initialValues, validationSchema } from './formValues'
 
-const useStyles = makeStyles((theme) => ({
-  mainImage: {},
-  mask: {},
-  box: {
-    backgroundColor: theme.palette.background.white,
-    padding: theme.spacing(3),
-  },
-  boxContainer: {
-    paddingBottom: theme.spacing(3),
-  },
-  thumbsContainer: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    marginTop: 15,
-  },
-  inputLabel: {
-    fontWeight: 400,
-    color: theme.palette.primary.main,
-  },
-  dropzone: {
-    alignItems: 'center',
-    backgroundColor: theme.palette.background.default,
-    border: '2px dashed black',
-    cursor: 'pointer',
-    display: 'flex',
-    height: 150,
-    justifyContent: 'center',
-    margin: '0 15px 15px 0',
-    padding: 10,
-    textAlign: 'center',
-    width: 186,
-  },
-  thumb: {
-    backgroundPosition: 'center center',
-    backgroundSize: 'cover',
-    height: 150,
-    margin: '0 15px 15px 0',
-    position: 'relative',
-    width: 186,
-
-    '& $mainImage': {
-      backgroundColor: 'darkgreen',
-      bottom: 0,
-      left: 0,
-      padding: '6px 10px',
-      position: 'absolute',
-    },
-
-    '&:hover $mask': {
-      display: 'flex',
-    },
-
-    '& $mask': {
-      alignItems: 'center',
-      backgroundColor: 'rgba(0, 0, 0, 0.7)',
-      display: 'none',
-      height: '100%',
-      justifyContent: 'center',
-      textAlign: 'center',
-      width: '100%',
-    }
-  },
-}))
-
-const validationSchema = yup.object().shape({
-  title: yup.string()
-    .min(6, 'Enter a longer title')
-    .max(100, 'Enter a smaller title')
-    .required('Required field'),
-  category: yup.string().required('Required field!'),
-  description: yup.string()
-    .min(50, 'Enter a description of at least 50 characters.')
-    .required('Required field'),
-  price: yup.number().required('Required field!'),
-  firstName: yup.string().required('Required field!'),
-  email: yup.string()
-    .email('Enter a valid email')
-    .required('Required field!'),
-  phone: yup.number().required('Required field!'),
-  files: yup.array()
-    .min(1, 'Add at least one image')
-    .required('Required field!'),
-})
+import useStyles from './styles'
 
 const Publish = () => {
   const classes = useStyles()
@@ -113,16 +29,7 @@ const Publish = () => {
   return (
     <TemplateDefault>
       <Formik
-        initialValues={{
-          title: '',
-          category: '',
-          description: '',
-          price: '',
-          email: '',
-          firstName: '',
-          phone: '',
-          files: [],
-        }}
+        initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={(values) => {
           console.log('Ok!', values)
@@ -311,16 +218,16 @@ const Publish = () => {
                       Contact Information
                     </Typography>
 
-                    <FormControl error={errors.firstName && touched.firstName} fullWidth>
+                    <FormControl error={errors.name && touched.name} fullWidth>
                       <InputLabel className={classes.inputLabel}>Name</InputLabel>
                       <OutlinedInput
-                        name="firstName"
-                        value={values.firstName}
+                        name="name"
+                        value={values.name}
                         label="Name"
                         onChange={handleChange}
                       />
                       <FormHelperText>
-                        { errors.firstName && touched.firstName ? errors.firstName : null }
+                        { errors.name && touched.name ? errors.name : null }
                       </FormHelperText>
                     </FormControl>
 
