@@ -6,7 +6,6 @@ import {
   Container,
   FormControl,
   FormHelperText,
-  IconButton,
   InputAdornment,
   InputLabel,
   MenuItem,
@@ -15,10 +14,8 @@ import {
   Typography
 } from '@mui/material'
 
-import { useDropzone } from 'react-dropzone'
-import { DeleteForever } from '@mui/icons-material'
-
 import TemplateDefault from '../../../src/templates/Default'
+import FileUpload from '../../../src/components/FileUpload'
 import { initialValues, validationSchema } from './formValues'
 
 import useStyles from './styles'
@@ -44,29 +41,6 @@ const Publish = () => {
             handleSubmit,
             setFieldValue,
           }) => {
-
-            const { getRootProps, getInputProps } = useDropzone({
-              accept: {
-                'image/*': ['.jpeg', '.jpg', '.png'],
-              },
-              onDrop: (acceptedFile) => {
-                const newFiles = acceptedFile.map((file) => {
-                  return Object.assign(file, {
-                    preview: URL.createObjectURL(file)
-                  })
-                })
-          
-                setFieldValue('files', [
-                  ...values.files,
-                  ...newFiles,
-                ])
-              }
-            })
-          
-            const handleRemoveFile = (fileName) => {
-              const newFileState = values.files.filter((file) => file.name !== fileName)
-              setFieldValue('files', newFileState)
-            }
 
             return (
               <form onSubmit={handleSubmit}>
@@ -128,50 +102,12 @@ const Publish = () => {
 
                 <Container maxWidth="md" className={classes.boxContainer}>
                   <Box className={classes.box}>
-                    <Typography component="h6" variant="h6" color="textPrimary">
-                      Images
-                    </Typography>
-                    <Typography component="div" variant="body2" color={errors.files && touched.files ? 'error' : 'textPrimary'}>
-                      The first image is the main one of your advertisement.
-                    </Typography>
-                    {
-                      errors.files && touched.files
-                        ? <Typography variant="body2" color="error" gutterBottom>{errors.files}</Typography>
-                        : null
-                    }
-                    <Box className={classes.thumbsContainer}>
-                      <Box className={classes.dropzone} {...getRootProps()}>
-                        <input name="files" {...getInputProps()} />
-                        <Typography variant="body2" color={errors.files && touched.files ? 'error' : 'textPrimary'}>
-                          Click to add or drag the image here.
-                        </Typography>
-                      </Box>
-
-                      {
-                        values.files.map((file, index) => (
-                          <Box
-                            key={file.name}
-                            className={classes.thumb}
-                            style={{ backgroundImage: `url(${file.preview})` }}
-                          >
-                            {
-                              index === 0 ?
-                                <Box className={classes.mainImage}>
-                                  <Typography variant="body2" color="secondary">
-                                    Main Image
-                                  </Typography>
-                                </Box>
-                              : null
-                            }
-                            <Box className={classes.mask}>
-                              <IconButton color="secondary" onClick={() => handleRemoveFile(file.name)}>
-                                <DeleteForever fontSize="large" />
-                              </IconButton>
-                            </Box>
-                          </Box>
-                        ))
-                      }
-                    </Box>
+                    <FileUpload
+                      files={values.files}
+                      errors={errors.files}
+                      touched={touched.files}
+                      setFieldValue={setFieldValue}
+                    />
                   </Box>
                 </Container>
 
