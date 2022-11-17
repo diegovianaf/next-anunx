@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+    cursor: 'pointer',
   },
   userName: {
     marginLeft: 6,
@@ -41,9 +42,11 @@ export default function ButtonAppBar() {
       <AppBar position="static">
         <Container maxWidth="lg">
           <Toolbar>
-            <Typography variant="h6" className={classes.title}>
-              Anunx
-            </Typography>
+            <Link href="/" passHref>
+              <Typography variant="h6" className={classes.title}>
+                Anunx
+              </Typography>
+            </Link>
             <Link href="/user/publish" passHref>
               <Button color="inherit" variant="outlined">
                 Advertise and Sell
