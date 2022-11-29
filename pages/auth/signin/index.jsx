@@ -1,7 +1,9 @@
 import { Formik } from 'formik'
 import { useRouter } from 'next/router'
+import { signIn, useSession  } from 'next-auth/react'
 
 import {
+  Alert,
   Box,
   Button,
   CircularProgress,
@@ -19,8 +21,17 @@ import useStyles from './styles'
 
 const Signin = () => {
   const classes = useStyles()
+  const router = useRouter()
+  const { data: session } = useSession()
 
-  const handleFormSubmit = async (values) => {
+  console.log(session)
+
+  const handleFormSubmit = (values) => {
+    signIn('credentials', {
+      email: values.email,
+      password: values.password,
+      callbackUrl: 'http://localhost:3000/user/dashboard',
+    })
   }
 
   return (
@@ -49,6 +60,15 @@ const Signin = () => {
               }) => {
                 return (
                   <form onSubmit={handleSubmit}>
+                    {
+                      router.query.i === '1'
+                        ? (
+                          <Alert severity="error" className={classes.errorMessage}>
+                            Invalid user or password!
+                          </Alert>
+                        )
+                        : null
+                    }
                     <FormControl error={errors.email && touched.email} className={classes.formControl} fullWidth>
                       <InputLabel>Email</InputLabel>
                       <OutlinedInput
