@@ -19,7 +19,21 @@ const useStyles = makeStyles((theme) => ({
     margin: '10px auto',
   },
   errorMessage: {
-    margin: '20px 0'
+    margin: '20px 0',
+  },
+  orSeparator: {
+    alignItems: 'center',
+    backgroundColor: '#e8e8e8',
+    display: 'flex',
+    height: 1,
+    justifyContent: 'center',
+    margin: theme.spacing(4, 0),
+    width: '100%',
+
+    '& span': {
+      backgroundColor: 'white',
+      padding: '0 30px',
+    }
   }
 }))
 

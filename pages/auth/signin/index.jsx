@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { Formik } from 'formik'
 import { useRouter } from 'next/router'
 import { signIn, useSession  } from 'next-auth/react'
@@ -26,6 +27,12 @@ const Signin = () => {
 
   console.log(session)
 
+  const handleGoogleSignin = () => {
+    signIn('google', {
+      callbackUrl: 'http://localhost:3000/user/dashboard',
+    })
+  }
+
   const handleFormSubmit = (values) => {
     signIn('credentials', {
       email: values.email,
@@ -38,7 +45,7 @@ const Signin = () => {
     <TemplateDefault>
       <Container maxWidth="sm" component="main" className={classes.container}>
         <Typography component="h1" variant="h3" align="center" color="texPrimary">
-          Login to your account
+          Welcome to your account
         </Typography>
       </Container>
 
@@ -110,10 +117,32 @@ const Signin = () => {
                           size="large"
                           className={classes.submit}
                           >
-                            Log in
+                            Sign in
                           </Button>
                         )
                     }
+
+                    <Box className={classes.orSeparator}>
+                      <span>or</span>
+                    </Box>
+
+                    <Box display="flex" justifyContent="center">
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        startIcon={
+                          <Image
+                            src="/images/logo_google.svg"
+                            width={20}
+                            height={20}
+                            alt="Login with Google"
+                          />
+                        }
+                        onClick={handleGoogleSignin}
+                      >
+                        Sign in with Google
+                      </Button>
+                    </Box>
                   </form>
                 )
               }
