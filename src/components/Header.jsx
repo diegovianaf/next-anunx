@@ -1,4 +1,8 @@
-import { AccountCircle } from '@mui/icons-material'
+import { useState } from 'react'
+import { useSession } from 'next-auth/react'
+import Link from 'next/link'
+import { makeStyles } from '@mui/styles'
+
 import {
   AppBar,
   Avatar,
@@ -11,9 +15,7 @@ import {
   Toolbar,
   Typography
 } from '@mui/material'
-import { makeStyles } from '@mui/styles'
-import Link from 'next/link'
-import { useState } from 'react'
+import { AccountCircle } from '@mui/icons-material'
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -23,8 +25,11 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     cursor: 'pointer',
   },
+  headerButton: {
+    marginRight: 10,
+  },
   userName: {
-    marginLeft: 6,
+    marginLeft: 8,
   },
   divider: {
     margin: '8px 0',
@@ -34,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ButtonAppBar() {
   const classes = useStyles()
   const [anchorUserMenu, setAnchorUserMenu] = useState(false)
+  const { data: session } = useSession()
 
   const openUserMenu = Boolean(anchorUserMenu)
 
@@ -47,21 +53,29 @@ export default function ButtonAppBar() {
                 Anunx
               </Typography>
             </Link>
-            <Link href="/user/publish" passHref>
-              <Button color="inherit" variant="outlined">
+            <Link
+              href={session ? '/user/publish' : '/auth/signin'}
+              passHref
+            >
+              <Button color="inherit" variant="outlined" className={classes.headerButton}>
                 Advertise and Sell
               </Button>
             </Link>
-            <IconButton color="secondary" onClick={(e) => setAnchorUserMenu(e.currentTarget)}>
-              {
-                true === false
-                ? <Avatar src="" />
-                : <AccountCircle />
-              }
-              <Typography variant="subtitle2" color="secondary" className={classes.userName}>
-                Diego Viana
-              </Typography>
-            </IconButton>
+            {
+              session
+                ? (
+                  <IconButton color="secondary" onClick={(e) => setAnchorUserMenu(e.currentTarget)}>
+                    {
+                      session.user.image
+                        ? <Avatar src={session.user.image} />
+                        : <AccountCircle />
+                    }
+                    <Typography variant="subtitle2" color="secondary" className={classes.userName}>
+                      {session.user.name}
+                    </Typography>
+                  </IconButton>
+                ) : null
+            }
             <Menu
               anchorEl={anchorUserMenu}
               open={openUserMenu}
