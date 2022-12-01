@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { makeStyles } from '@mui/styles'
 
@@ -15,6 +15,7 @@ import {
   Toolbar,
   Typography
 } from '@mui/material'
+
 import { AccountCircle } from '@mui/icons-material'
 
 const useStyles = makeStyles((theme) => ({
@@ -92,7 +93,11 @@ export default function ButtonAppBar() {
                 <MenuItem>Publish new Advertisement</MenuItem>
               </Link>
               <Divider className={classes.divider} />
-              <MenuItem>Log out</MenuItem>
+              <MenuItem onClick={() => signOut({
+                callbackUrl: '/'
+              })}>
+                Sign Out
+              </MenuItem>
             </Menu>
           </Toolbar>
         </Container>
