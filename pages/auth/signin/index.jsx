@@ -20,7 +20,7 @@ import TemplateDefault from '../../../src/templates/Default'
 import { initialValues, validationSchema } from './formValues'
 import useStyles from './styles'
 
-const Signin = () => {
+const Signin = ({ APP_URL }) => {
   const classes = useStyles()
   const router = useRouter()
   const { data: session } = useSession()
@@ -29,7 +29,7 @@ const Signin = () => {
 
   const handleGoogleSignin = () => {
     signIn('google', {
-      callbackUrl: 'http://localhost:3000/user/dashboard',
+      callbackUrl: `${APP_URL}/user/dashboard`,
     })
   }
 
@@ -37,7 +37,7 @@ const Signin = () => {
     signIn('credentials', {
       email: values.email,
       password: values.password,
-      callbackUrl: 'http://localhost:3000/user/dashboard',
+      callbackUrl: `${APP_URL}/user/dashboard`,
     })
   }
 
@@ -155,3 +155,9 @@ const Signin = () => {
 }
 
 export default Signin
+
+export const getServerSideProps = () => ({
+  props: {
+    APP_URL: process.env.APP_URL
+  }
+})
