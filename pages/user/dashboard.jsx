@@ -7,29 +7,40 @@ import {
 } from '@mui/material'
 
 import { makeStyles } from '@mui/styles'
+import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 import Card from '../../src/components/Card'
 import TemplateDefault from '../../src/templates/Default'
 
 const useStyles = makeStyles(() => ({
+  centerContainer: {
+    textAlign: 'center',
+  },
   buttonAdd: {
     margin: '30px auto',
-    display: 'block',
   },
 }))
 
 const Home = () => {
   const classes = useStyles()
 
+  const { data: session } = useSession()
+
   return (
     <TemplateDefault>
       <ThemeProvider >
-        <Container maxWidth="sm">
+        <Container maxWidth="sm" className={classes.centerContainer}>
           <Typography component="h1" variant="h2" align="center">
             My Advertisements
           </Typography>
-          <Button variant="contained" color="primary" className={classes.buttonAdd}>
-            Publish new Advertisement
-          </Button>
+          <Link
+            href={session ? '/user/publish' : '/auth/signin'}
+            passHref
+          >
+            <Button variant="contained" color="primary" className={classes.buttonAdd}>
+              Publish new Advertisement
+            </Button>
+          </Link>
         </Container>
         <Container maxWidth="md">
           <Grid container spacing={4}>
